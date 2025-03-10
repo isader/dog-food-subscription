@@ -166,7 +166,7 @@ backend/
 └── package.json
 ```
 
-### Areas for Improvement
+### Area for Improvement
 
 **Form Management**: The `SubscriptionForm.tsx` component is too large and could be refactored into smaller components:
    ```
