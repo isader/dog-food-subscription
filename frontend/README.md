@@ -1,178 +1,54 @@
-# Dog Food Subscription Service
+# React + TypeScript + Vite
 
-An e-commerce application for subscribing to personalized dog food deliveries. This project allows customers to sign up for a monthly subscription box of fresh dog food in personalized pouches, sized appropriately for their dog.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-![Subscription Form](screenshot1.png)
-![Dashboard](screenshot2.png)
+Currently, two official plugins are available:
 
-## Overview
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-This application was developed as a take-home exercise, implementing a full-stack e-commerce subscription platform with:
+## Expanding the ESLint configuration
 
-- A React/TypeScript frontend
-- A NestJS backend
-- PostgreSQL database
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-## Features
-
-- Dog profile creation with name, age, and weight input
-- Personalized subscription recommendation based on dog details
-- Subscription management (pause, cancel)
-- Payment simulation
-- User dashboard with subscription status and delivery history
-
-## Tech Stack
-
-### Frontend
-- React with TypeScript
-- Vite for build tooling
-- Material UI for component library
-- React Router for navigation
-- React Hook Form for form handling
-
-### Backend
-- NestJS framework
-- TypeORM for database interaction
-- PostgreSQL database
-- Class Validator for DTO validation
-
-## Setup Instructions
-
-### Prerequisites
-
-- Node.js (v14+)
-- npm or yarn
-- PostgreSQL
-
-### Database Setup
-
-```bash
-# Create database
-createdb dogfood
+```js
+export default tseslint.config({
+  extends: [
+    // Remove ...tseslint.configs.recommended and replace with this
+    ...tseslint.configs.recommendedTypeChecked,
+    // Alternatively, use this for stricter rules
+    ...tseslint.configs.strictTypeChecked,
+    // Optionally, add this for stylistic rules
+    ...tseslint.configs.stylisticTypeChecked,
+  ],
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
 ```
 
-> Note: If `createdb` command is not found, you may need to add PostgreSQL bin directory to your PATH or use:
-> ```bash
-> psql postgres -c 'CREATE DATABASE dogfood;'
-> ```
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-### Backend Setup
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-```bash
-# Navigate to backend directory
-cd backend
-
-# Install dependencies
-npm install
-
-# Start the development server
-npm run start:dev
+export default tseslint.config({
+  plugins: {
+    // Add the react-x and react-dom plugins
+    'react-x': reactX,
+    'react-dom': reactDom,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended typescript rules
+    ...reactX.configs['recommended-typescript'].rules,
+    ...reactDom.configs.recommended.rules,
+  },
+})
 ```
-
-The API will be available at http://localhost:3001/api
-
-### Frontend Setup
-
-```bash
-# Navigate to frontend directory
-cd frontend
-
-# Install dependencies
-npm install
-
-# Start the development server
-npm run dev
-```
-
-The application will be available at http://localhost:3000
-
-## Application Structure
-
-### Frontend
-
-```
-frontend/
-├── public/
-│   └── lyka-logo.svg
-├── src/
-│   ├── components/
-│   │   ├── dashboard/
-│   │   │   ├── cards/
-│   │   │   │   ├── AccountInfoCard.tsx
-│   │   │   │   ├── DogProfileCard.tsx
-│   │   │   │   ├── PaymentMethodCard.tsx
-│   │   │   │   ├── StatusCard.tsx
-│   │   │   │   └── SubscriptionDetailsCard.tsx
-│   │   │   ├── AccountTab.tsx
-│   │   │   ├── DashboardTabs.tsx
-│   │   │   ├── DeliveriesTab.tsx
-│   │   │   ├── DeliveryTable.tsx
-│   │   │   └── SubscriptionTab.tsx
-│   │   └── Header.tsx
-│   ├── context/
-│   │   └── AppContext.tsx
-│   ├── pages/
-│   │   ├── Dashboard.tsx
-│   │   ├── DogProfileForm.tsx
-│   │   ├── SubscriptionForm.tsx
-│   │   ├── SubscriptionRecommendation.tsx
-│   │   └── SuccessPage.tsx
-│   ├── services/
-│   │   └── api.ts
-│   ├── themes/
-│   │   └── main.ts
-│   ├── types/
-│   │   └── index.ts
-│   ├── App.tsx
-│   └── main.tsx
-└── vite.config.ts
-```
-
-### Backend
-
-```
-backend/
-├── src/
-│   ├── dogs/
-│   │   ├── dto/
-│   │   ├── entities/
-│   │   ├── dogs.controller.ts
-│   │   ├── dogs.module.ts
-│   │   └── dogs.service.ts
-│   ├── payments/
-│   │   ├── dto/
-│   │   ├── entities/
-│   │   ├── payments.controller.ts
-│   │   ├── payments.module.ts
-│   │   └── payments.service.ts
-│   ├── subscriptions/
-│   │   ├── dto/
-│   │   ├── entities/
-│   │   ├── subscription-scheduler.service.ts
-│   │   ├── subscriptions.controller.ts
-│   │   ├── subscriptions.module.ts
-│   │   └── subscriptions.service.ts
-│   ├── users/
-│   │   ├── dto/
-│   │   ├── entities/
-│   │   ├── users.controller.ts
-│   │   ├── users.module.ts
-│   │   └── users.service.ts
-│   ├── app.controller.ts
-│   ├── app.module.ts
-│   ├── app.service.ts
-│   └── main.ts
-├── nest-cli.json
-└── package.json
-```
-
-### Areas for Improvement
-
-**Form Management**: The `SubscriptionForm.tsx` component is too large and could be refactored into smaller components:
-   ```
-   SubscriptionForm/
-   ├── CustomerInfoForm.tsx
-   ├── PaymentForm.tsx
-   ├── OrderSummary.tsx
-   └── index.tsx
-   ```
